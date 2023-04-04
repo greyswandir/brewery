@@ -81,7 +81,7 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/findBeers"))
                 .andExpect(model().attributeExists("beer"));
-        verifyZeroInteractions(beerRepository);
+        verifyNoInteractions(beerRepository);
     }
 
     //ToDO: Mocking Page
@@ -111,7 +111,7 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/createBeer"))
                 .andExpect(model().attributeExists("beer"));
-        verifyZeroInteractions(beerRepository);
+        verifyNoInteractions(beerRepository);
     }
 
     @Test
@@ -131,7 +131,7 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/createOrUpdateBeer"))
                 .andExpect(model().attributeExists("beer"));
-        verifyZeroInteractions(beerRepository);
+        verifyNoMoreInteractions(beerRepository);
     }
 
     @Test

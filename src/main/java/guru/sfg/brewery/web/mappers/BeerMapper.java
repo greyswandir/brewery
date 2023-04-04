@@ -19,6 +19,7 @@ package guru.sfg.brewery.web.mappers;
 
 import guru.sfg.brewery.domain.Beer;
 import guru.sfg.brewery.web.model.BeerDto;
+import lombok.NoArgsConstructor;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 
