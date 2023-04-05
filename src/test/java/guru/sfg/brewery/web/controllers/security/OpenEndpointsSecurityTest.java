@@ -3,8 +3,9 @@ package guru.sfg.brewery.web.controllers.security;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 public class OpenEndpointsSecurityTest extends BaseSecurity {
@@ -30,5 +31,13 @@ public class OpenEndpointsSecurityTest extends BaseSecurity {
     void findBeersByUpc() throws Exception {
         mockMvc.perform(get("/api/v1/beerUpc/0675890930000"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void findBeersWithAnonymous() throws Exception {
+        mockMvc.perform(get("/beers/find").with(anonymous()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("beers/findBeers"))
+                .andExpect(model().attributeExists("beer"));
     }
 }

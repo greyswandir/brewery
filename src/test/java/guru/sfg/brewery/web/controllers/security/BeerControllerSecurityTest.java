@@ -1,5 +1,6 @@
 package guru.sfg.brewery.web.controllers.security;
 
+import guru.sfg.brewery.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -31,6 +32,15 @@ class BeerControllerSecurityTest extends BaseSecurity {
         mockMvc.perform(get("/beers/find").with(httpBasic(login, password)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/findBeers"))
+                .andExpect(model().attributeExists("beer"));
+    }
+
+    @Test
+    void findBeersWithAnonymous() throws Exception {
+        mockMvc.perform(get("/beers/new").with(httpBasic(
+                SecurityConfig.USER_USER_USER, SecurityConfig.USER_PASS_PASSWORD)))
+                .andExpect(status().isOk())
+                .andExpect(view().name("beers/createBeer"))
                 .andExpect(model().attributeExists("beer"));
     }
 }
