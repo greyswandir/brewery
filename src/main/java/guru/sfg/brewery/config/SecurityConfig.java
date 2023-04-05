@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
@@ -27,6 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${spring.security.user.password}")
     private String password;
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -51,15 +58,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser(login)
-                .password("{noop}" + password)
+                .password(password)
                 .roles("ADMIN")
                 .and()
                 .withUser(ADMIN_USER_SPRING_2)
-                .password("{noop}" + ADMIN_PASS_TEST_2)
+                .password(ADMIN_PASS_TEST_2)
                 .roles("ADMIN")
                 .and()
                 .withUser(USER_USER_USER)
-                .password("{noop}" + USER_PASS_PASSWORD)
+                .password(USER_PASS_PASSWORD)
                 .roles("USER");
     }
 
