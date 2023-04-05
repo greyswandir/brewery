@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -47,6 +48,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser(login)
+                .password("{noop}" + password)
+                .roles("ADMIN")
+                .and()
+                .withUser(ADMIN_USER_SPRING_2)
+                .password("{noop}" + ADMIN_PASS_TEST_2)
+                .roles("ADMIN")
+                .and()
+                .withUser(USER_USER_USER)
+                .password("{noop}" + USER_PASS_PASSWORD)
+                .roles("USER");
+    }
+
+    /*@Override
     @Bean
     protected UserDetailsService userDetailsService() {
         UserDetails admin = User.withDefaultPasswordEncoder()
@@ -68,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .build();
 
         return new InMemoryUserDetailsManager(admin, admin2, user);
-    }
+    }*/
 
     /*@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
