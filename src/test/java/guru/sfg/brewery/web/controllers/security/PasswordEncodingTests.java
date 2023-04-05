@@ -13,12 +13,13 @@ public class PasswordEncodingTests {
 
     @Test
     void testLdap() {
-        PasswordEncoder ldap = new BCryptPasswordEncoder();
-        System.out.println(ldap.encode(PASSWORD));
-        System.out.println(ldap.encode(PASSWORD));
-        String encodedPass = ldap.encode(PASSWORD);
+        PasswordEncoder bCrypt = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 17);
+        System.out.println(bCrypt.encode(PASSWORD));
+        System.out.println(bCrypt.encode(PASSWORD));
+        String encodedPass = bCrypt.encode(PASSWORD);
 
-        assertTrue(ldap.matches(PASSWORD, encodedPass));
+        PasswordEncoder bCrypt2 = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2B, 13);
+        assertTrue(bCrypt2.matches(PASSWORD, encodedPass));
     }
 
     @Test
