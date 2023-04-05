@@ -13,7 +13,7 @@ public class PasswordEncodingTests {
 
     @Test
     void testLdap() {
-        PasswordEncoder bCrypt = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 17);
+        PasswordEncoder bCrypt = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 12);
         System.out.println(bCrypt.encode(PASSWORD));
         System.out.println(bCrypt.encode(PASSWORD));
         String encodedPass = bCrypt.encode(PASSWORD);
