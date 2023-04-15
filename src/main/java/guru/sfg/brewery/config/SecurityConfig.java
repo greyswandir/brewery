@@ -1,6 +1,8 @@
 package guru.sfg.brewery.config;
 
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
+import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
+import guru.sfg.brewery.security.UrlParamAuthFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -24,12 +25,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String USER_USER_USER = "user";
     public static final String USER_PASS_PASSWORD = "password";
 
-    public RestHeaderAuthFilter restHeaderAuthFilter(AuthenticationManager authenticationManager){
-        RestHeaderAuthFilter filter = new RestHeaderAuthFilter(new AntPathRequestMatcher("/api/**"));
-        filter.setAuthenticationManager(authenticationManager);
-        return filter;
-    }
-
     @Value("${spring.security.user.name}")
     private String login;
 
@@ -41,8 +36,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    public RestHeaderAuthFilter restHeaderAuthFilter(AuthenticationManager authenticationManager){
+        RestHeaderAuthFilter filter = new RestHeaderAuthFilter(new AntPathRequestMatcher("/api/**"));
+        filter.setAuthenticationManager(authenticationManager);
+        return filter;
+    }
+
+    public UrlParamAuthFilter urlParamAuthFilter(AuthenticationManager authenticationManager) {
+        return new UrlParamAuthFilter(new AntPathRequestMatcher("/api/**"), authenticationManager);
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.addFilter(urlParamAuthFilter(authenticationManager()))
+                .csrf().disable();
+
         http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable();
