@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,5 +41,24 @@ public class OpenEndpointsSecurityTest extends BaseSecurity {
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/findBeers"))
                 .andExpect(model().attributeExists("beer"));
+    }
+
+    @Test
+    void deleteBeer() throws Exception {
+        mockMvc.perform(delete("/api/v1/beer/493410b3-dd0b-4b78-97bf-289f50f6e74f")
+                .header("Api-Key", "spring")
+                .header("Api-Secret", "test"))
+                .andExpect(status().isOk());
+    }
+    @Test
+    void deleteBeerBasic() throws Exception {
+        mockMvc.perform(delete("/api/v1/beer/493410b3-dd0b-4b78-97bf-289f50f6e74f")
+                .with(httpBasic("spring", "test")))
+                .andExpect(status().is2xxSuccessful());
+    }
+    @Test
+    void deleteBeerNoAuth() throws Exception {
+        mockMvc.perform(delete("/api/v1/beer/493410b3-dd0b-4b78-97bf-289f50f6e74f"))
+                .andExpect(status().isUnauthorized());
     }
 }
