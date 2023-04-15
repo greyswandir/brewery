@@ -61,4 +61,11 @@ public class OpenEndpointsSecurityTest extends BaseSecurity {
         mockMvc.perform(delete("/api/v1/beer/493410b3-dd0b-4b78-97bf-289f50f6e74f"))
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void deleteBeerBadCreds() throws Exception{
+        mockMvc.perform(delete("/api/v1/beer/493410b3-dd0b-4b78-97bf-289f50f6e74f")
+                        .header("Api-Key","spring").header("Api-Secret", "testXXXX"))
+                .andExpect(status().isUnauthorized());
+    }
 }
