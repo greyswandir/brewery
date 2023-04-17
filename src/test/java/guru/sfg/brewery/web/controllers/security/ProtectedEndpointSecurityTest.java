@@ -73,7 +73,7 @@ public class ProtectedEndpointSecurityTest extends BaseSecurity {
     void getBreweriesForbiddenForAdmin() throws Exception {
         mockMvc.perform(get("/brewery/api/v1/breweries")
                         .with(httpBasic(ADMIN_USER_SPRING, ADMIN_PASS_TEST)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().is2xxSuccessful());
     }
     @Test
     void getBreweriesForbiddenForUser() throws Exception {
@@ -85,7 +85,7 @@ public class ProtectedEndpointSecurityTest extends BaseSecurity {
     void getBreweriesIndxForbiddenForAdmin() throws Exception {
         mockMvc.perform(get("/brewery/breweries")
                         .with(httpBasic(ADMIN_USER_SPRING, ADMIN_PASS_TEST)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().is2xxSuccessful());
     }
     @Test
     void getBreweriesIndxForbiddenForUser() throws Exception {
