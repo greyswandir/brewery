@@ -1,16 +1,13 @@
 package guru.sfg.brewery.config;
 
-import guru.sfg.brewery.security.JpaUserDetailsService;
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
 import guru.sfg.brewery.security.UrlParamAuthFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,12 +19,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_CUSTOMER = "CUSTOMER";
+    public static final String ROLE_USER = "USER";
+
     public static final String ADMIN_USER_SPRING = "spring";
     public static final String ADMIN_PASS_TEST = "test";
-    public static final String ADMIN_USER_SPRING_2 = "spring2";
-    public static final String ADMIN_PASS_TEST_2 = "test2";
-    public static final String USER_USER_USER = "user";
-    public static final String USER_PASS_PASSWORD = "password";
+    public static final String CUSTOMER_USER_SCOTT = "scott";
+    public static final String CUSTOMER_PASS_TIGER = "tiger";
+    public static final String CUSTOMER_USER_USER = "user";
+    public static final String CUSTOMER_PASS_PASSWORD = "password";
+    public static final String USER_USER_SPRING_2 = "spring2";
+    public static final String USER_PASS_TEST_2 = "test2";
 
     @Value("${spring.security.user.name}")
     private String login;
@@ -67,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     .antMatchers("/beers/find").permitAll()
                                     .antMatchers("/h2-console/**").permitAll()
                                     .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
+                                    .mvcMatchers(HttpMethod.DELETE, "/api/v1/beer/**").hasRole(ROLE_ADMIN)
                                     .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll();
                         }
                 )

@@ -19,6 +19,7 @@ public class UserDataLoader implements CommandLineRunner {
     private final AuthorityRepo authorityRepo;
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
         if (authorityRepo.count() == 0) {
@@ -27,26 +28,32 @@ public class UserDataLoader implements CommandLineRunner {
     }
 
     private void loadSecurityDate() {
-        Authority admin = authorityRepo.save(Authority.builder().role("ADMIN").build());
-        Authority user = authorityRepo.save(Authority.builder().role("USER").build());
-        Authority customer = authorityRepo.save(Authority.builder().role("CUSTOMER").build());
+        Authority admin = authorityRepo.save(Authority.builder().role("ROLE_" + ROLE_ADMIN).build());
+        Authority user = authorityRepo.save(Authority.builder().role("ROLE_" + ROLE_USER).build());
+        Authority customer = authorityRepo.save(Authority.builder().role("ROLE_" + ROLE_CUSTOMER).build());
 
         userRepo.save(User.builder()
-                        .username(ADMIN_USER_SPRING)
-                        .password(passwordEncoder.encode(ADMIN_PASS_TEST))
-                        .authority(admin)
+                .username(ADMIN_USER_SPRING)
+                .password(passwordEncoder.encode(ADMIN_PASS_TEST))
+                .authority(admin)
                 .build());
 
         userRepo.save(User.builder()
-                        .username(ADMIN_USER_SPRING_2)
-                        .password(passwordEncoder.encode(ADMIN_PASS_TEST_2))
-                        .authority(user)
+                .username(CUSTOMER_USER_SCOTT)
+                .password(passwordEncoder.encode(CUSTOMER_PASS_TIGER))
+                .authority(customer)
                 .build());
 
         userRepo.save(User.builder()
-                        .username(USER_USER_USER)
-                        .password(passwordEncoder.encode(USER_PASS_PASSWORD))
-                        .authority(customer)
+                .username(CUSTOMER_USER_USER)
+                .password(passwordEncoder.encode(CUSTOMER_PASS_PASSWORD))
+                .authority(customer)
+                .build());
+
+        userRepo.save(User.builder()
+                .username(USER_USER_SPRING_2)
+                .password(passwordEncoder.encode(USER_PASS_TEST_2))
+                .authority(user)
                 .build());
 
         log.debug("Users Loaded: " + userRepo.count());
