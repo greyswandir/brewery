@@ -10,6 +10,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import static guru.sfg.brewery.config.SecurityConfig.*;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -30,20 +32,20 @@ public class UserDataLoader implements CommandLineRunner {
         Authority customer = authorityRepo.save(Authority.builder().role("CUSTOMER").build());
 
         userRepo.save(User.builder()
-                        .username("spring")
-                        .password(passwordEncoder.encode("test"))
+                        .username(ADMIN_USER_SPRING)
+                        .password(passwordEncoder.encode(ADMIN_PASS_TEST))
                         .authority(admin)
                 .build());
 
         userRepo.save(User.builder()
-                        .username("spring2")
-                        .password(passwordEncoder.encode("test2"))
+                        .username(ADMIN_USER_SPRING_2)
+                        .password(passwordEncoder.encode(ADMIN_PASS_TEST_2))
                         .authority(user)
                 .build());
 
         userRepo.save(User.builder()
-                        .username("user")
-                        .password(passwordEncoder.encode("password"))
+                        .username(USER_USER_USER)
+                        .password(passwordEncoder.encode(USER_PASS_PASSWORD))
                         .authority(customer)
                 .build());
 

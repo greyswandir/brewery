@@ -1,8 +1,10 @@
 package guru.sfg.brewery.config;
 
+import guru.sfg.brewery.security.JpaUserDetailsService;
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
 import guru.sfg.brewery.security.UrlParamAuthFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String ADMIN_USER_SPRING = "spring";
+    public static final String ADMIN_PASS_TEST = "test";
     public static final String ADMIN_USER_SPRING_2 = "spring2";
     public static final String ADMIN_PASS_TEST_2 = "test2";
     public static final String USER_USER_USER = "user";
@@ -77,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
     }
 
-    @Override
+/*    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder passwordEncoder = passwordEncoder();
         auth.inMemoryAuthentication()
@@ -94,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles("USER");
 
         auth.inMemoryAuthentication().withUser("scott").password(passwordEncoder.encode("tiger")).roles("CUSTOMER");
-    }
+    }*/
 
     /*@Override
     @Bean
