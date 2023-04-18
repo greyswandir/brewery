@@ -5,16 +5,12 @@ import guru.sfg.brewery.repositories.BeerRepository;
 import guru.sfg.brewery.web.model.BeerStyleEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Random;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -39,31 +35,5 @@ public class OpenEndpointsSecurityTest extends BaseSecurity {
     void testGetIndexSlash() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void findBeers() throws Exception {
-        mockMvc.perform(get("/api/v1/beer/"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void findBeersById() throws Exception {
-        mockMvc.perform(get("/api/v1/beer/" + beerToDelete().getId()))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void findBeersByUpc() throws Exception {
-        mockMvc.perform(get("/api/v1/beerUpc/" + beerToDelete().getUpc()))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void findBeersWithAnonymous() throws Exception {
-        mockMvc.perform(get("/beers/find").with(anonymous()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/findBeers"))
-                .andExpect(model().attributeExists("beer"));
     }
 }

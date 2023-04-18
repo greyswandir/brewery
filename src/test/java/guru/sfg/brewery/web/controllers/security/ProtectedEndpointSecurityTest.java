@@ -3,7 +3,11 @@ package guru.sfg.brewery.web.controllers.security;
 import guru.sfg.brewery.domain.Beer;
 import guru.sfg.brewery.repositories.BeerRepository;
 import guru.sfg.brewery.web.model.BeerStyleEnum;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,13 +17,60 @@ import static guru.sfg.brewery.config.SecurityConfig.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 public class ProtectedEndpointSecurityTest extends BaseSecurity {
 
     @Autowired
     BeerRepository beerRepository;
+
+    @ParameterizedTest(name = "#{index} with [{arguments}]")
+    @MethodSource("guru.sfg.brewery.web.controllers.security.BaseSecurity#getStreamNotAdmin")
+    void deleteBeerHttpBasicNotAuth(String user, String pwd) throws Exception {
+        mockMvc.perform(delete("/api/v1/beer/" + beerToDelete().getId())
+                        .with(httpBasic(user, pwd)))
+                .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("Init New Form")
+    @Nested
+    class InitNewForm{
+
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("guru.sfg.brewery.web.controllers.security.BaseSecurity#getStreamAllUsers")
+        void initCreationFormAuth(String user, String pwd) throws Exception {
+
+            mockMvc.perform(get("/beers/new").with(httpBasic(user, pwd)))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("beers/createBeer"))
+                    .andExpect(model().attributeExists("beer"));
+        }
+
+        @Test
+        void initCreationFormNotAuth() throws Exception {
+            mockMvc.perform(get("/beers/new"))
+                    .andExpect(status().isUnauthorized());
+        }
+    }
+
+    @Nested
+    @DisplayName("Find By UPC")
+    class FindByUPC {
+        @Test
+        void findBeerByUpc() throws Exception {
+            mockMvc.perform(get("/api/v1/beerUpc/" + beerToDelete().getUpc()))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("guru.sfg.brewery.web.controllers.security.BaseSecurity#getStreamAllUsers")
+        void findBeerByUpcAUTH(String user, String pwd) throws Exception {
+            mockMvc.perform(get("/api/v1/beerUpc/" + beerToDelete().getUpc())
+                            .with(httpBasic(user, pwd)))
+                    .andExpect(status().isOk());
+        }
+    }
 
     public Beer beerToDelete() {
         Random rand = new Random();
