@@ -20,6 +20,7 @@ package guru.sfg.brewery.web.controllers;
 import guru.sfg.brewery.domain.Customer;
 import guru.sfg.brewery.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +33,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import static guru.sfg.brewery.config.SecurityConfig.ROLE_ADMIN;
+import static guru.sfg.brewery.config.SecurityConfig.ROLE_CUSTOMER;
 
 @RequiredArgsConstructor
 @RequestMapping("/customers")
@@ -47,6 +51,7 @@ public class CustomerController {
         return "customers/findCustomers";
     }
 
+    @Secured({"ROLE_" + ROLE_ADMIN, "ROLE_" + ROLE_CUSTOMER})
     @GetMapping
     public String processFindFormReturnMany(Customer customer, BindingResult result, Model model){
         // find customers by name

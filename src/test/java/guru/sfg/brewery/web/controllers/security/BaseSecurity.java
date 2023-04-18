@@ -44,4 +44,9 @@ public abstract class BaseSecurity {
         return Stream.of(Arguments.of(CUSTOMER_USER_SCOTT, CUSTOMER_PASS_TIGER),
                 Arguments.of(USER_USER_SPRING_2, USER_PASS_TEST_2));
     }
+
+    public static Stream<Arguments> getStreamAdminCustomer() {
+        return Stream.of(Arguments.of(ADMIN_USER_SPRING, ADMIN_PASS_TEST),
+                Arguments.of(CUSTOMER_USER_SCOTT, CUSTOMER_PASS_TIGER));
+    }
 }
