@@ -2,6 +2,7 @@ package guru.sfg.brewery.security;
 
 import guru.sfg.brewery.domain.security.Authority;
 import guru.sfg.brewery.domain.security.User;
+import guru.sfg.brewery.repositories.security.RoleRepo;
 import guru.sfg.brewery.repositories.security.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class JpaUserDetailsService implements UserDetailsService {
 
     private final UserRepo userRepo;
+    private final RoleRepo roleRepo;
 
     @Transactional
     @Override
@@ -47,7 +49,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> convertToSpringAuthorities(Set<Authority> authorities) {
         if (authorities != null && authorities.size() > 0) {
             return authorities.stream()
-                    .map(Authority::getRole)
+                    .map(Authority::getPermission)
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toSet());
         } else {
