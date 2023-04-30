@@ -37,11 +37,10 @@ public class ProtectedEndpointSecurityTest extends BaseSecurity {
     @Nested
     class InitNewForm{
 
-        @ParameterizedTest(name = "#{index} with [{arguments}]")
-        @MethodSource("guru.sfg.brewery.web.controllers.security.BaseSecurity#getStreamAllUsers")
-        void initCreationFormAuth(String user, String pwd) throws Exception {
+        @Test
+        void initCreationFormAuth() throws Exception {
 
-            mockMvc.perform(get("/beers/new").with(httpBasic(user, pwd)))
+            mockMvc.perform(get("/beers/new").with(httpBasic(ADMIN_USER_SPRING, ADMIN_PASS_TEST)))
                     .andExpect(status().isOk())
                     .andExpect(view().name("beers/createBeer"))
                     .andExpect(model().attributeExists("beer"));

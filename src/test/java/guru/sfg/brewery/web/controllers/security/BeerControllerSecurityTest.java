@@ -17,11 +17,9 @@ class BeerControllerSecurityTest extends BaseSecurity {
      */
     @WithMockUser
     @Test
-    void findBeers() throws Exception {
+    void findBeersWithAnonymous() throws Exception {
         mockMvc.perform(get("/beers/find"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/findBeers"))
-                .andExpect(model().attributeExists("beer"));
+                .andExpect(status().isForbidden());
     }
 
     /**
@@ -36,9 +34,9 @@ class BeerControllerSecurityTest extends BaseSecurity {
     }
 
     @Test
-    void findBeersWithAnonymous() throws Exception {
+    void createBeers() throws Exception {
         mockMvc.perform(get("/beers/new").with(httpBasic(
-                SecurityConfig.CUSTOMER_USER_USER, SecurityConfig.CUSTOMER_PASS_PASSWORD)))
+                SecurityConfig.ADMIN_USER_SPRING, SecurityConfig.ADMIN_PASS_TEST)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/createBeer"))
                 .andExpect(model().attributeExists("beer"));
