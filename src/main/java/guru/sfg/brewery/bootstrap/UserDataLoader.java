@@ -11,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static guru.sfg.brewery.config.SecurityConfig.*;
@@ -26,6 +28,7 @@ public class UserDataLoader implements CommandLineRunner {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public void run(String... args) throws Exception {
         if (authorityRepo.count() == 0) {
@@ -43,9 +46,9 @@ public class UserDataLoader implements CommandLineRunner {
         Role customerRole = roleRepo.save(Role.builder().name("CUSTOMER").build());
         Role userRole = roleRepo.save(Role.builder().name("USER").build());
 
-        adminRole.setAuthorities(Set.of(createBeer, readBeer, updateBeer, deleteBeer));
-        customerRole.setAuthorities(Set.of(readBeer));
-        userRole.setAuthorities(Set.of(readBeer));
+        adminRole.setAuthorities(new HashSet<>(Set.of(createBeer, readBeer, updateBeer, deleteBeer)));
+        customerRole.setAuthorities(new HashSet<>(Set.of(readBeer)));
+        userRole.setAuthorities(new HashSet<>(Set.of(readBeer)));
 
         roleRepo.saveAll(Arrays.asList(adminRole, customerRole, userRole));
 
