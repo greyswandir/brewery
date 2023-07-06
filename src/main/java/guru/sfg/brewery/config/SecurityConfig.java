@@ -1,12 +1,12 @@
 package guru.sfg.brewery.config;
 
+import guru.sfg.brewery.security.BasicAuthFilter;
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
 import guru.sfg.brewery.security.UrlParamAuthFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -57,6 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
+    public BasicAuthFilter basicAuthFilter(AuthenticationManager authenticationManager) {
+        BasicAuthFilter filter = new BasicAuthFilter(new AntPathRequestMatcher("/api/**"));
+        filter.setAuthenticationManager(authenticationManager);
+        return filter;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
@@ -64,6 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
 
         http.addFilterBefore(urlParamAuthFilter(authenticationManager()),
+                UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(basicAuthFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests((authorize) -> {
