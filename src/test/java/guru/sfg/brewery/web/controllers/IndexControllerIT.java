@@ -5,6 +5,7 @@ import guru.sfg.brewery.repositories.BeerRepository;
 import guru.sfg.brewery.repositories.CustomerRepository;
 import guru.sfg.brewery.services.BeerService;
 import guru.sfg.brewery.services.BreweryService;
+import guru.sfg.brewery.web.controllers.api.BeerOrderController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

@@ -55,6 +55,9 @@ public class DefaultBreweryLoader implements CommandLineRunner {
     public static final String BEER_1_UPC = "0631234200036";
     public static final String BEER_2_UPC = "0631234300019";
     public static final String BEER_3_UPC = "0083783375213";
+    public static final String STPETE_USERNAME = "stpete";
+    public static final String DUNEDIN_USERNAME = "dunedin";
+    public static final String KEYWEST_USERNAME = "keywest";
 
     private final BreweryRepository breweryRepository;
     private final BeerRepository beerRepository;
@@ -163,17 +166,17 @@ public class DefaultBreweryLoader implements CommandLineRunner {
                 .build());
 
         //create users
-        User stPeteUser = userRepo.save(User.builder().username("stpete")
+        User stPeteUser = userRepo.save(User.builder().username(STPETE_USERNAME)
                 .password(passwordEncoder.encode("password"))
                 .customer(stPeteCustomer)
                 .role(customerRole).build());
 
-        User dunedinUser = userRepo.save(User.builder().username("dunedin")
+        User dunedinUser = userRepo.save(User.builder().username(DUNEDIN_USERNAME)
                 .password(passwordEncoder.encode("password"))
                 .customer(dunedinCustomer)
                 .role(customerRole).build());
 
-        User keywest = userRepo.save(User.builder().username("keywest")
+        User keywest = userRepo.save(User.builder().username(KEYWEST_USERNAME)
                 .password(passwordEncoder.encode("password"))
                 .customer(keyWestCustomer)
                 .role(customerRole).build());
