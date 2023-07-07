@@ -102,7 +102,6 @@ class BeerOrderControllerTest extends BaseSecurity {
                 .andExpect(status().isCreated());
     }
 
-    @Disabled
     @WithUserDetails(DefaultBreweryLoader.KEYWEST_USERNAME)
     @Test
     void createOrderUserNOTAuthCustomer() throws Exception {
