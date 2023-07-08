@@ -72,8 +72,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(urlParamAuthFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class);
 
+        /* Filter is ignoring @PreAuthorize conditions and passes through
         http.addFilterBefore(basicAuthFilter(authenticationManager()),
-                UsernamePasswordAuthenticationFilter.class);
+                UsernamePasswordAuthenticationFilter.class);*/
 
         http.authorizeRequests((authorize) -> {
                             authorize

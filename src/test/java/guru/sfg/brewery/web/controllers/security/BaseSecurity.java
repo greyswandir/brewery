@@ -17,7 +17,7 @@ public abstract class BaseSecurity {
     @Autowired
     WebApplicationContext wac;
 
-    MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
     @Value("${spring.security.user.name}")
     public String login;
@@ -26,7 +26,7 @@ public abstract class BaseSecurity {
     public String password;
 
     @BeforeEach
-    void setUp() {
+    void buildMockMvc() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .apply(springSecurity())
