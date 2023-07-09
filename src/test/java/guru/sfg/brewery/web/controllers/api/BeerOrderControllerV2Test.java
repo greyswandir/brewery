@@ -10,7 +10,6 @@ import guru.sfg.brewery.repositories.BeerRepository;
 import guru.sfg.brewery.repositories.CustomerRepository;
 import guru.sfg.brewery.web.controllers.BaseIT;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -88,7 +87,6 @@ class BeerOrderControllerV2Test extends BaseIT {
                 .andExpect(status().isUnauthorized());
     }
 
-    @Disabled
     @Transactional
     @WithUserDetails("spring")
     @Test
@@ -99,7 +97,6 @@ class BeerOrderControllerV2Test extends BaseIT {
                 .andExpect(status().is2xxSuccessful());
     }
 
-    @Disabled
     @Transactional
     @WithUserDetails(DefaultBreweryLoader.STPETE_USERNAME)
     @Test
@@ -110,7 +107,6 @@ class BeerOrderControllerV2Test extends BaseIT {
                 .andExpect(status().is2xxSuccessful());
     }
 
-    @Disabled
     @Transactional
     @WithUserDetails(DefaultBreweryLoader.DUNEDIN_USERNAME)
     @Test
@@ -118,6 +114,6 @@ class BeerOrderControllerV2Test extends BaseIT {
         BeerOrder beerOrder = stPeteCustomer.getBeerOrders().stream().findFirst().orElseThrow();
 
         mockMvc.perform(get(API_ROOT + beerOrder.getId()))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isNotFound());
     }
 }
