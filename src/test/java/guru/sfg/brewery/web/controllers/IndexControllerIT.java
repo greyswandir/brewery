@@ -6,6 +6,7 @@ import guru.sfg.brewery.repositories.CustomerRepository;
 import guru.sfg.brewery.services.BeerService;
 import guru.sfg.brewery.services.BreweryService;
 import guru.sfg.brewery.web.controllers.api.BeerOrderController;
+import guru.sfg.brewery.web.controllers.api.BeerOrderControllerV2;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +34,9 @@ public class IndexControllerIT extends BaseIT {
 
     @MockBean
     BeerOrderController beerOrderController;
+
+    @MockBean
+    BeerOrderControllerV2 beerOrderControllerV2;
 
     @Test
     void getIndexSlash() throws Exception {
