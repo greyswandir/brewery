@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import static guru.sfg.brewery.config.SecurityConfig.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,7 +46,7 @@ public class CustomerControllerSecurityTest extends BaseSecurity {
         @Rollback
         @Test
         void processCreationForm() throws Exception{
-            mockMvc.perform(post("/customers/new")
+            mockMvc.perform(post("/customers/new").with(csrf())
                             .param("customerName", "Foo Customer")
                             .with(httpBasic(ADMIN_USER_SPRING, ADMIN_PASS_TEST)))
                     .andExpect(status().is3xxRedirection());
@@ -63,7 +64,7 @@ public class CustomerControllerSecurityTest extends BaseSecurity {
 
         @Test
         void processCreationFormNOAUTH() throws Exception{
-            mockMvc.perform(post("/customers/new")
+            mockMvc.perform(post("/customers/new").with(csrf())
                             .param("customerName", "Foo Customer"))
                     .andExpect(status().isUnauthorized());
         }

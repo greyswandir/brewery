@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable();
+                .csrf().ignoringAntMatchers("/h2-console/**", "/api/v1/**");
 
         http.addFilterBefore(urlParamAuthFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class);
@@ -86,6 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests((authorize) -> {
                             authorize
                                     .antMatchers("/").permitAll()
+                                    .antMatchers("/resources/css/**").permitAll()
                                     .antMatchers("/h2-console/**").permitAll();
                         }
                 )
