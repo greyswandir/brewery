@@ -117,6 +117,7 @@ public class BeerRestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @CrossOrigin
     @PreAuthorize("hasAuthority('beer.delete')")
     @DeleteMapping({"beer/{beerId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
