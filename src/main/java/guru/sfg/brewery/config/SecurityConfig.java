@@ -95,7 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(basicAuthFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class);*/
 
-        http.authorizeRequests((authorize) -> {
+        http
+                .cors().and()
+                .authorizeRequests((authorize) -> {
                             authorize
                                     .antMatchers("/").permitAll()
                                     .antMatchers("/resources/**").permitAll()
